@@ -642,13 +642,35 @@ components:
           type: integer
           format: int64
           example: 1
-        name:
+        type:
           type: string
-          example: รองเท้าแตะ
-        image:
-          type: string
-          format: binary
-          example: BLOB
+          example: category
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: รองเท้าแตะ
+            image:
+              type: object
+              properties:
+                url:
+                  type: string
+                  example: http://gniv.co.th/assets/a.jpg
+            created_at:
+              type: string
+              format: date-time
+              example: 2023-10-10 18:36:33.739155 +0700
+            updated_at:
+              type: string
+              format: date-time
+              example: 2023-10-10 18:36:33.739155 +0700
+        relationships:
+          type: object
+          properties:
+            products:
+              type: array
+              $ref: '#/components/schemas/Product'
       xml:
         name: category
     Product:
@@ -663,21 +685,27 @@ components:
           type: integer
           format: int64
           example: 10
-        name:
+        type:
           type: string
-          example: Vari
-        image:
-          type: string
-          format: binary
-          example: BLOB
-        price:
-          type: string
-          example: 1200
-        barcode:
-          type: string
-          example: 10100100101
-        category:
-          $ref: '#/components/schemas/Category'
+          example: product
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Vari
+            image:
+              type: string
+              format: binary
+              example: BLOB
+            price:
+              type: string
+              example: 1200
+            barcode:
+              type: string
+              example: 10100100101
+            category:
+              $ref: '#/components/schemas/Category'
       xml:
         name: product
     ProductVariation:
@@ -691,21 +719,24 @@ components:
           type: integer
           format: int64
           example: 10
-        color:
-          type: string
-          example: red
-        size:
-          type: string
-          example: 10.5
-        image:
-          type: string
-          format: binary
-          example: BLOB
-        barcode:
-          type: string
-          example: 10100100101
-        product:
-          $ref: '#/components/schemas/Product'
+        attributes:
+          type: object
+          properties:
+            color:
+              type: string
+              example: red
+            size:
+              type: string
+              example: 10.5
+            image:
+              type: string
+              format: binary
+              example: BLOB
+            barcode:
+              type: string
+              example: 10100100101
+            product:
+              $ref: '#/components/schemas/Product'
       xml:
         name: product_variation
     Order:
