@@ -112,7 +112,7 @@ paths:
         - api_key:
             - write:products
             - read:products
-  /product:
+  # /product:
     # post:
     #   tags:
     #     - product
@@ -319,6 +319,14 @@ paths:
       summary: Update an existing order
       description: Update an existing order by Id
       operationId: updateOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: ID of order to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         description: Update an existent order in the store
         content:
@@ -825,14 +833,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Product'
-    UserArray:
-      description: List of user object
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
   securitySchemes:
     api_key:
       type: apiKey
