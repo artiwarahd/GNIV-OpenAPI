@@ -719,6 +719,9 @@ components:
           type: integer
           format: int64
           example: 10
+        type:
+          type: string
+          example: product_variation
         attributes:
           type: object
           properties:
@@ -746,53 +749,59 @@ components:
           type: integer
           format: int64
           example: 10
-        total:
-          type: integer
-          format: int64
-          example: 2400
-        net_total:
-          type: integer
-          format: int64
-          example: 2400
-        customer_type:
+        type:
           type: string
-          enum:
-            - ลูกค้าทั่วไป
-            - สมาชิก
-        customer_age:
-          type: string
-          enum:
-            - 2-9
-            - 10-18
-            - 19-35
-            - 36-60
-            - 60+
-        # user:
-        #   $ref: '#/components/schemas/User'
-        # branch:
-        #   $ref: '#/components/schemas/Branch'
-        # attendance:
-        #   $ref: '#/components/schemas/Attendance'
-        created_at:
-          type: string
-          format: date-time
-          example: 2023-10-10 18:36:33.739155 +0700
-        updated_at:
-          type: string
-          format: date-time
-          example: 2023-10-10 18:36:33.739155 +0700
-        extra_promotion_type:
-          type: string
-        extra_promotion_discount:
-          type: string
-          example: 10
-        bill_photo:
-          type: string
-          format: binary
-          example: BLOB
-        note:
-          type: string
-          example: ส่วนลดพิเศษสำหรับลูกค้า 10 คนแรก
+          example: order
+        attributes:
+          type: object
+          properties:
+            total:
+              type: integer
+              format: int64
+              example: 2400
+            net_total:
+              type: integer
+              format: int64
+              example: 2400
+            customer_type:
+              type: string
+              enum:
+                - ลูกค้าทั่วไป
+                - สมาชิก
+            customer_age:
+              type: string
+              enum:
+                - 2-9
+                - 10-18
+                - 19-35
+                - 36-60
+                - 60+
+            # user:
+            #   $ref: '#/components/schemas/User'
+            # branch:
+            #   $ref: '#/components/schemas/Branch'
+            # attendance:
+            #   $ref: '#/components/schemas/Attendance'
+            created_at:
+              type: string
+              format: date-time
+              example: 2023-10-10 18:36:33.739155 +0700
+            updated_at:
+              type: string
+              format: date-time
+              example: 2023-10-10 18:36:33.739155 +0700
+            extra_promotion_type:
+              type: string
+            extra_promotion_discount:
+              type: string
+              example: 10
+            bill_photo:
+              type: string
+              format: binary
+              example: BLOB
+            note:
+              type: string
+              example: ส่วนลดพิเศษสำหรับลูกค้า 10 คนแรก
       xml:
         name: order
     OrderItem:
@@ -802,34 +811,40 @@ components:
           type: integer
           format: int64
           example: 10
-        product_variation:
-          $ref: '#/components/schemas/ProductVariation'
-        promotion:
-          $ref: '#/components/schemas/Promotion'
-        order:
-          $ref: '#/components/schemas/Order'
-        promotion_snapshot:
+        type:
           type: string
-          format: hash
-        price:
-          type: integer
-          format: int64
-          example: 1200
-        discount_percent:
-          type: integer
-          format: int64
-          example: 10
-        net_price:
-          type: integer
-          format: int64
-          example: 1200
-        created_at:
-          type: string
-          format: date-time
-          example: 2023-10-10 18:36:33.739155 +0700
-        product_variation_snapshot:
-          type: string
-          format: hash
+          example: order_item
+        attributes:
+          type: object
+          properties:
+            product_variation:
+              $ref: '#/components/schemas/ProductVariation'
+            promotion:
+              $ref: '#/components/schemas/Promotion'
+            order:
+              $ref: '#/components/schemas/Order'
+            promotion_snapshot:
+              type: string
+              format: hash
+            price:
+              type: integer
+              format: int64
+              example: 1200
+            discount_percent:
+              type: integer
+              format: int64
+              example: 10
+            net_price:
+              type: integer
+              format: int64
+              example: 1200
+            created_at:
+              type: string
+              format: date-time
+              example: 2023-10-10 18:36:33.739155 +0700
+            product_variation_snapshot:
+              type: string
+              format: hash
       xml:
         name: order_item
     Promotion:
@@ -839,20 +854,26 @@ components:
           type: integer
           format: int64
           example: 1
-        name:
+        type:
           type: string
-          example: Mother's Day
-        discount_percent:
-          type: integer
-          enum:
-            - 10
-            - 20
-            - 30
-            - 40
-            - 50
-        sequence:
-          type: integer
-          example: 1
+          example: promotion
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Mother's Day
+            discount_percent:
+              type: integer
+              enum:
+                - 10
+                - 20
+                - 30
+                - 40
+                - 50
+            sequence:
+              type: integer
+              example: 1
       xml:
         name: category
     ApiResponse:
