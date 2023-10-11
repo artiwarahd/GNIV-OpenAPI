@@ -669,10 +669,30 @@ components:
           type: object
           properties:
             products:
-              type: array
-              $ref: '#/components/schemas/Product'
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductRef'
+        included:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
       xml:
         name: category
+    CategoryRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        type:
+          type: string
+          example: "category"
+      xml:
+        name: category_ref
     Product:
       required:
         - category_id
@@ -704,10 +724,35 @@ components:
             barcode:
               type: string
               example: 10100100101
+        relationships:
+          type: object
+          properties:
             category:
-              $ref: '#/components/schemas/Category'
+              type: object
+              properties:
+                data:
+                  $ref: '#/components/schemas/CategoryRef'
+            product_variations:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductVariationRef'
       xml:
         name: product
+    ProductRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        type:
+          type: string
+          example: "product"
+      xml:
+        name: product_ref
     ProductVariation:
       required:
         - product_id
@@ -742,6 +787,18 @@ components:
               $ref: '#/components/schemas/Product'
       xml:
         name: product_variation
+    ProductVariationRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        type:
+          type: string
+          example: "product_variation"
+      xml:
+        name: product_variation_ref
     Order:
       type: object
       properties:
