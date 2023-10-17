@@ -7,7 +7,7 @@ info:
     email: artiwarahd@gmail.com
   version: 0.0.1
 servers:
-  - url: http://xx.xxx.xxx.xx/api/v1
+  - url: http://139.59.125.193/api/v1
 tags:
   - name: category
     description: All About Categories
@@ -94,8 +94,8 @@ paths:
           description: Search products by category_id
           required: false
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
         - name: color
           in: query
           description: Search products by color
@@ -257,9 +257,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Order'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
         '400':
           description: Invalid tag value
       security:
@@ -277,10 +280,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: '#/components/schemas/OrderParams'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: '#/components/schemas/OrderParams'
         required: true
       responses:
         '200':
@@ -316,7 +319,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+                  included:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderItem'
         '400':
           description: Invalid ID supplied
         '404':
@@ -345,10 +357,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: '#/components/schemas/OrderParams'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: '#/components/schemas/OrderParams'
         required: true
       responses:
         '200':
@@ -356,7 +368,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/OrderParams'
         '400':
           description: Invalid ID supplied
         '404':
@@ -367,7 +379,87 @@ paths:
         - api_key:
             - write:orders
             - read:orders
-  /order/{orderId}/delete_item/{orderItemId}:
+  /order/{id}/upload_bill_photo:
+    post:
+      tags:
+        - order
+      summary: Upload bill photo
+      description: ''
+      operationId: uploadBillPhoto
+      parameters:
+        - in: path
+          name: id
+          description: ID of order to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: order
+          description: order attributes in hash format
+          required: true
+          schema:
+            type: object
+            properties:
+              bill_photo:
+                type: string
+                format: binary
+                example: BLOB
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - api_key:
+            - write:orders
+            - read:orders
+  /order/{id}/add_items/{orderItemId}:
+    post:
+      tags:
+        - order
+      summary: Add an order item to the order
+      description: ''
+      operationId: addItemOrder
+      parameters:
+        - name: id
+          in: path
+          description: ID of order
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: order
+          description: order attributes in hash format
+          required: true
+          schema:
+            type: object
+            properties:
+              order_items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderItemParams'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+      security:
+        - api_key:
+            - write:orders
+            - read:orders
+  /order/{id}/delete_item/{orderItemId}:
     delete:
       tags:
         - order
@@ -375,20 +467,20 @@ paths:
       description: ''
       operationId: deleteItemOrder
       parameters:
-        - name: orderId
+        - name: id
           in: path
           description: ID of order
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
         - name: orderItemId
           in: path
           description: ID of item to delete
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       responses:
         '200':
           description: successful operation
@@ -413,15 +505,15 @@ paths:
           description: ID of order to submit
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/Order'
       security:
         - api_key:
             - write:orders
@@ -439,47 +531,15 @@ paths:
           description: ID of order to cancel
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - api_key:
-            - write:orders
-            - read:orders
-  /order/{orderId}/upload_bill_photo:
-    post:
-      tags:
-        - order
-      summary: Upload bill photo
-      description: ''
-      operationId: uploadBillPhoto
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of order to update
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/Order'
       security:
         - api_key:
             - write:orders
@@ -862,8 +922,55 @@ components:
             note:
               type: string
               example: ส่วนลดพิเศษสำหรับลูกค้า 10 คนแรก
+            status:
+              type: string
+              enum:
+                - draft
+                - paid
+                - cancelled
+        relationships:
+          type: object
+          properties:
+            products:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrderItemRef'
       xml:
         name: order
+    OrderParams:
+      type: object
+      properties:
+        note: 
+          type: string
+          example: Test add note
+        customer_type: 
+          type: string
+          example: Offline
+        customer_age: 
+          type: string
+          example: 35-60
+        extra_promotion_type: 
+          type: string
+          example: buy 2 get more 5%
+        extra_promotion_discount: 
+          type: string
+          example: 5
+        status: 
+          type: string
+          enum:
+            - draft
+            - paid
+            - cancelled
+          example: paid
+        bill_photo: 
+          type: string
+          format: binary
+          example: BLOB
+      xml:
+        name: order_params
     OrderItem:
       type: object
       properties:
@@ -907,6 +1014,39 @@ components:
               format: hash
       xml:
         name: order_item
+    OrderItemRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        type:
+          type: string
+          example: "order_item"
+      xml:
+        name: order_item_ref
+    OrderItemParams:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        order_id:
+          type: integer
+          format: int64
+          example: 1
+        product_variation_id:
+          type: integer
+          format: int64
+          example: 1
+        promotion_id:
+          type: integer
+          format: int64
+          example: 1
+      xml:
+        name: order_item_params
     Promotion:
       type: object
       properties:
@@ -939,13 +1079,9 @@ components:
     ApiResponse:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
+        success:
+          type: boolean
+          example: true
   requestBodies:
     Product:
       description: Product object that needs to be added to the store
